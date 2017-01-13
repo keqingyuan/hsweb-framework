@@ -6,13 +6,16 @@ import org.hsweb.web.service.GenericService;
 
 import java.util.List;
 
+/**
+ * Created by zhouhao on 16-5-10.
+ */
 public interface ModuleMetaService extends GenericService<ModuleMeta, String> {
 
-    List<ModuleMeta> selectByKeyAndRoleId(String key, List<String> roleId);
-
-    ModuleMeta selectSingleByKeyAndRoleId(String key, List<String> roleId);
-
-    String selectMD5SingleByKeyAndRoleId(String key, List<String> roleId);
+    default List<ModuleMeta> selectByKeyAndRoleId(String key, String... roleId) {
+        QueryParam queryParam = new QueryParam();
+        queryParam.where("key", key).and("role_id$IN", roleId);
+        return this.select(queryParam);
+    }
 
     default List<ModuleMeta> selectByKey(String key) {
         QueryParam queryParam = new QueryParam();

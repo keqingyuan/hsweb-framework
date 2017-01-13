@@ -146,8 +146,7 @@ public class FormServiceImpl extends AbstractServiceImpl<Form, String> implement
     @Caching(evict = {
             @CacheEvict(value = {CACHE_KEY + ".deploy"}, key = "'deploy.'+target.selectByPk(#formId).getName()+'.html'"),
             @CacheEvict(value = {CACHE_KEY + ".deploy"}, key = "'deploy.'+target.selectByPk(#formId).getName()"),
-            @CacheEvict(value = {CACHE_KEY}, key = "'using.'+target.selectByPk(#formId).getName()"),
-            @CacheEvict(value = {CACHE_KEY}, key = "'deploy.'+target.selectByPk(#formId).getName()+'.version'")
+            @CacheEvict(value = {CACHE_KEY}, key = "'using.'+target.selectByPk(#formId).getName()")
     })
     public void deploy(String formId) throws SQLException {
         Form old = this.selectByPk(formId);
@@ -176,8 +175,7 @@ public class FormServiceImpl extends AbstractServiceImpl<Form, String> implement
     @Caching(evict = {
             @CacheEvict(value = {CACHE_KEY + ".deploy"}, key = "'deploy.'+target.selectByPk(#formId).getName()+'.html'"),
             @CacheEvict(value = {CACHE_KEY + ".deploy"}, key = "'deploy.'+target.selectByPk(#formId).getName()"),
-            @CacheEvict(value = {CACHE_KEY}, key = "'using.'+target.selectByPk(#formId).getName()"),
-            @CacheEvict(value = {CACHE_KEY}, key = "'deploy.'+target.selectByPk(#formId).getName()+'.version'")
+            @CacheEvict(value = {CACHE_KEY}, key = "'using.'+target.selectByPk(#formId).getName()")
     })
     public void unDeploy(String formId) {
         Form old = this.selectByPk(formId);
@@ -218,11 +216,5 @@ public class FormServiceImpl extends AbstractServiceImpl<Form, String> implement
     @Cacheable(value = CACHE_KEY, key = "'using.'+#name")
     public Form selectUsing(String name) {
         return formMapper.selectUsing(name);
-    }
-
-    @Override
-    @Cacheable(value = CACHE_KEY, key = "'deploy.'+#name+'.version'")
-    public int selectDeployedVersion(String name) {
-        return selectDeployed(name).getRelease();
     }
 }

@@ -165,13 +165,8 @@ public class DynamicFormServiceImpl implements DynamicFormService, ExpressionSco
         query.setParam(param);
         int total = query.total();
         result.setTotal(total);
-        if (total == 0) {
-            result.setData(new ArrayList<>());
-        } else {
-            //根据实际记录数量重新指定分页参数
-            param.rePaging(total);
-            result.setData(query.list(param.getPageIndex(), param.getPageSize()));
-        }
+        param.rePaging(total);
+        result.setData(query.list(param.getPageIndex(), param.getPageSize()));
         return result;
     }
 

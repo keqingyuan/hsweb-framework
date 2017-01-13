@@ -37,13 +37,9 @@ public abstract class AbstractServiceImpl<Po, PK> implements GenericService<Po, 
         param.setPaging(false);
         int total = getMapper().total(param);
         pagerResult.setTotal(total);
-        if (total == 0) {
-            pagerResult.setData(new ArrayList<>());
-        } else {
-            //根据实际记录数量重新指定分页参数
-            param.rePaging(total);
-            pagerResult.setData(getMapper().select(param));
-        }
+        //根据实际记录数量重新指定分页参数
+        param.rePaging(total);
+        pagerResult.setData(getMapper().select(param));
         return pagerResult;
     }
 

@@ -33,8 +33,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
-import static org.hsweb.web.core.message.ResponseMessage.*;
-
 /**
  * 通用控制器,此控制器实现了通用的增删改查功能
  * 需要提供一个实现了{@link GenericService}接口的实现类
@@ -85,7 +83,7 @@ public abstract class GenericController<PO, PK> {
             data = getService().select(param);
         else
             data = getService().selectPager(param);
-        return ok(data)
+        return ResponseMessage.ok(data)
                 .include(getPOType(), param.getIncludes())
                 .exclude(getPOType(), param.getExcludes())
                 .onlyData();
@@ -105,7 +103,7 @@ public abstract class GenericController<PO, PK> {
         PO po = getService().selectByPk(id);
         if (po == null)
             throw new NotFoundException("data is not found!");
-        return ok(po);
+        return ResponseMessage.ok(po);
     }
 
 
@@ -120,7 +118,7 @@ public abstract class GenericController<PO, PK> {
     @Authorize(action = "R")
     public ResponseMessage total(QueryParam param) {
         // 获取条件查询
-        return ok(getService().total(param));
+        return ResponseMessage.ok(getService().total(param));
     }
 
     /**
@@ -136,7 +134,7 @@ public abstract class GenericController<PO, PK> {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseMessage add(@RequestBody PO object) {
         PK pk = getService().insert(object);
-        return created(pk);
+        return ResponseMessage.created(pk);
     }
 
     /**
@@ -153,7 +151,7 @@ public abstract class GenericController<PO, PK> {
         PO old = getService().selectByPk(id);
         assertFound(old, "data is not found!");
         getService().delete(id);
-        return ok();
+        return ResponseMessage.ok();
     }
 
     /**
@@ -174,7 +172,7 @@ public abstract class GenericController<PO, PK> {
             ((GenericPo) object).setId(id);
         }
         int number = getService().update(object);
-        return ok(number);
+        return ResponseMessage.ok(number);
     }
 
     /**
@@ -196,7 +194,7 @@ public abstract class GenericController<PO, PK> {
         } else {
             throw new BusinessException("请求数据格式错误!");
         }
-        return ok(number);
+        return ResponseMessage.ok(number);
     }
 
     /**
